@@ -91,5 +91,5 @@ A single-failure threshold (the most "cautious" possible rule) is actually the *
 
 ## Author
 
-**Syed Zabiullah Rehan Mehdi** — B.Tech Computer Science, Osmania University
+**Syed Zabiullah Rehan Mehdi** — B.Tech | Computer Science - Cyber Security
 Built as part of a college research assignment on cybercrime & digital forensics, and expanded for portfolio use.
