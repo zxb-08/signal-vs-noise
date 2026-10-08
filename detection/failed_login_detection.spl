@@ -1,0 +1,44 @@
+// ============================================================
+// Failed SSH Login Detection — core aggregation query
+// Signal vs Noise: Measuring Alert False-Positive Rates in Splunk
+// ============================================================
+// Groups failed login attempts by source IP and time window.
+// Adjust `span` and the `where count >=` threshold based on
+// your own false-positive testing (see /report for methodology).
+
+index=* host=kali "Failed password"
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| bin _time span=1m
+| stats count by src_ip, _time
+| sort -_time
+
+
+// ------------------------------------------------------------
+// Variant: filtered to only show windows crossing a threshold
+// ------------------------------------------------------------
+index=* host=kali "Failed password"
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| bin _time span=1m
+| stats count by src_ip, _time
+| where count >= 3
+
+
+// ------------------------------------------------------------
+// Variant: correlate failures with a subsequent success
+// (identifies brute-force-shaped sessions: many fails -> 1 success)
+// ------------------------------------------------------------
+index=* host=kali ("Failed password" OR "Accepted password")
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| bin _time span=1m
+| stats count(eval(searchmatch("Failed password"))) as fails,
+        count(eval(searchmatch("Accepted password"))) as success by _time
+| sort -_time
+
+
+// ------------------------------------------------------------
+// Variant: raw total failed-attempt count per source IP
+// (no time binning — useful for a quick overview)
+// ------------------------------------------------------------
+index=* host=kali "Failed password"
+| rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
+| stats count by src_ip

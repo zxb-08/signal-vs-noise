@@ -1,0 +1,32 @@
+title: SSH Brute Force — Multiple Failed Logins Followed by Success
+id: 7e2b1a3c-9f44-4b2e-8a3d-signal-vs-noise-lab
+status: experimental
+description: >
+  Detects a burst of failed SSH authentication attempts from a single
+  source followed by a successful login within the same short window —
+  the signature pattern of a brute-force tool such as Hydra.
+  Threshold tuned empirically against real lab data; see /report for
+  the methodology and false-positive analysis behind the chosen value.
+references:
+  - https://attack.mitre.org/techniques/T1110/
+author: Syed Zabiullah Rehan Mehdi
+date: 2026/10/04
+tags:
+  - attack.credential_access
+  - attack.t1110
+logsource:
+  product: linux
+  service: auth
+detection:
+  failed:
+    message|contains: 'Failed password'
+  success:
+    message|contains: 'Accepted password'
+  timeframe: 1m
+  condition: failed | count() by src_ip >= 3 and success
+falsepositives:
+  - A legitimate user who mistypes their password multiple times before
+    succeeding. Lab testing (see /report, Section 7) found this pattern
+    capped at 2 failed attempts per window for genuine user error;
+    thresholds below 3 produced false positives on this benign traffic.
+level: medium

@@ -1,0 +1,15 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+*.swp
+
+# Sensitive — never commit real credentials or password lists used in testing
+passwords.txt
+biggerpasswords.txt
+*.env
+
+# Large render artifacts (keep only final PDF/screenshots)
+page-*.jpg
