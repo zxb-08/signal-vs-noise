@@ -55,11 +55,11 @@ Most SOC/SIEM tutorials stop at "install the tool, trigger one alert, done." Thi
 ```
 ┌─────────────────────────┐             ┌──────────────────────────┐
 │   Kali Linux VM          │            │   Host machine            │
-│   (attacker + victim)     │          │   Splunk Enterprise        │
-│                            │  :9997  │   (indexer + dashboard)    │
-│  Splunk Universal Forwarder│ ───────▶│  http://localhost:8000     │
+│   (attacker + victim)     │            │   Splunk Enterprise        │
+│                            │  :9997    │   (indexer + dashboard)    │
+│  Splunk Universal Forwarder│ ───────▶ │  http://localhost:8000     │
 │  monitors /var/log/auth.log│          │                            │
-└─────────────────────────┘            └──────────────────────────┘
+└─────────────────────────┘              └──────────────────────────┘
 ```
 
 Both attacker and victim traffic used the loopback interface (`127.0.0.1`) on a single Kali VM — a deliberate scoping decision to keep the lab achievable while still producing authentic `sshd` log output. See the report's **Limitations** section for what this leaves untested (e.g. multi-source attacks).
