@@ -17,10 +17,10 @@ A hands-on lab investigating *alert fatigue* — the well-known problem where SO
 
 | Threshold | False positives (of 11 benign windows) | Attack caught? |
 |---|---|---|
-| ≥ 1 | 10 (91%) | ✅ |
-| ≥ 2 | 3 (27%) | ✅ |
-| **≥ 3** | **0 (0%)** | ✅ |
-| ≥ 10 | 0 (0%) | ❌ missed |
+| ≥ 1 | 10 (91%) | positive |
+| ≥ 2 | 3 (27%) | positive |
+| **≥ 3** | **0 (0%)** | positive |
+| ≥ 10 | 0 (0%) | negative |
 
 ![Threshold tuning chart](report/chart2_threshold_tuning.png)
 
