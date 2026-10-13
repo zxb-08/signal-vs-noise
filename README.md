@@ -140,5 +140,5 @@ All attacks were run against my own isolated lab systems using a dedicated test 
 
 ## Author
 
-**Syed Zabiullah Rehan Mehdi**, B.Tech Computer Science (Cyber Security)
+**Syed Zabiullah Mehdi**, B.Tech Computer Science (Cyber Security)
 Built as part of a college research assignment on cybercrime and digital forensics, and expanded for portfolio use.
