@@ -61,7 +61,7 @@ Counts failed SSH logins per source IP in 1-minute windows and flags windows wit
 ┌──────────────────────────┐            ┌──────────────────────────┐
 │  Kali Linux VM           │            │  Host machine            │
 │  (attacker + victim)     │   :9997    │  Splunk Enterprise       │
-│  Splunk Universal        │ ────────▶  │  (indexer + dashboard)   │
+│  Splunk Universal        │ ────────▶ │  (indexer + dashboard)   │
 │  Forwarder → auth.log    │            │  http://localhost:8000   │
 └──────────────────────────┘            └──────────────────────────┘
 ```
