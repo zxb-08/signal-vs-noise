@@ -1,11 +1,15 @@
-// ============================================================
-// Failed SSH Login Detection — core aggregation query
-// Signal vs Noise: Measuring Alert False-Positive Rates in Splunk
-// ============================================================
-// Groups failed login attempts by source IP and time window.
-// Adjust `span` and the `where count >=` threshold based on
-// your own false-positive testing (see /report for methodology).
+````````
+==========================================================
+Failed SSH Login Detection
+Signal vs Noise: Measuring Alert False-Positive Rates in Splunk
+==========================================================
+Groups failed SSH logins by source IP and 1-minute window.
+Tune the where count threshold based on your own false-positive testing (see /report).
+Run each query separately in Splunk Search.
+````````
 
+
+````````Query 1: All failed-login windows per source IP```
 index=* host=kali "Failed password"
 | rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
 | bin _time span=1m
@@ -13,32 +17,28 @@ index=* host=kali "Failed password"
 | sort -_time
 
 
-// ------------------------------------------------------------
-// Variant: filtered to only show windows crossing a threshold
-// ------------------------------------------------------------
+```````Query 2: Detection rule, windows with 3 or more failures (tuned threshold)```
 index=* host=kali "Failed password"
 | rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
 | bin _time span=1m
 | stats count by src_ip, _time
 | where count >= 3
+| sort -_time
 
 
-// ------------------------------------------------------------
-// Variant: correlate failures with a subsequent success
-// (identifies brute-force-shaped sessions: many fails -> 1 success)
-// ------------------------------------------------------------
+``````Query 3: Failures and successes per source IP (many fails then a success suggests brute force)```
 index=* host=kali ("Failed password" OR "Accepted password")
 | rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
 | bin _time span=1m
 | stats count(eval(searchmatch("Failed password"))) as fails,
-        count(eval(searchmatch("Accepted password"))) as success by _time
+        count(eval(searchmatch("Accepted password"))) as success
+        by src_ip, _time
 | sort -_time
 
 
-// ------------------------------------------------------------
-// Variant: raw total failed-attempt count per source IP
-// (no time binning — useful for a quick overview)
-// ------------------------------------------------------------
+`````Query 4: Total failed attempts per source IP (quick overview)```
 index=* host=kali "Failed password"
 | rex "from (?<src_ip>\d+\.\d+\.\d+\.\d+)"
 | stats count by src_ip
+| sort -count
+`````
